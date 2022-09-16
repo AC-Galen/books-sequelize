@@ -22,6 +22,18 @@ const userController = {
         res.redirect('/signin')
       })
       .catch(err => next(err)) // 接住前面拋出的錯誤,呼叫專門處理錯誤的middleware(express有內建的error handler,但也可客製化)
+  },
+  signInPage: (req, res) => {
+    res.render('signin')
+  },
+  signIn: (req, res) => {
+    req.flash('success_messages', '成功登入！')
+    res.redirect('/books')
+  },
+  layout: (req, res) => {
+    req.flash('success_messages', '成功登出!')
+    req.logout()
+    res.redirect('/signin')
   }
 }
 module.exports = userController

@@ -27,8 +27,7 @@ passport.serializeUser((user, cb) => {
 })
 passport.deserializeUser((id, cb) => {
   User.findByPk(id).then(user => {
-    user = user.toJSON() // 利用toJSON 將物件格式整理
-    console.log(user) // 暫時添加,先把user印出查看
+    user = user.toJSON() // 利用toJSON 將物件格式整理,如果沒有整理,在前端是無法簡單拿到資料的
     return cb(null, user)
   })
 })

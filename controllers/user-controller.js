@@ -30,8 +30,8 @@ const userController = {
     req.flash('success_messages', '成功登入！')
     res.redirect('/books')
   },
-  layout: (req, res) => {
-    req.flash('success_messages', '成功登出!')
+  logout: (req, res) => {
+    req.flash('success_messages', '登出成功！')
     req.logout()
     res.redirect('/signin')
   }

@@ -12,9 +12,12 @@ const passport = require('./config/passport')
 const app = express()
 const PORT = process.env.PORT
 
+const { getUser } = require('./helpers/auth-helpers')
+const handlebarsHelpers = require('./helpers/handlebars-helper')
+
 const routes = require('./routes')
 
-app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+app.engine('hbs', exphbs({ extname: '.hbs', helpers: handlebarsHelpers }))
 app.set('view engine', 'hbs')
 
 app.use(express.urlencoded({ extended: true }))
@@ -23,10 +26,11 @@ app.use(methodOverride('_method'))
 app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }))
 app.use(passport.initialize()) // 初始化passport
 app.use(passport.session()) // 啟動session功能
-app.use(flash()) // 掛套件
+app.use(flash())
 app.use((req, res, next) => { // 設定success和warning信息
   res.locals.success_messages = req.flash('success_messages')
   res.locals.error_messages = req.flash('error_messages')
+  res.locals.user = getUser(req)
   next()
 })
 

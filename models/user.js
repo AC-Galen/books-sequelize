@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     name: DataTypes.STRING,
     email: DataTypes.STRING,
-    password: DataTypes.STRING
+    password: DataTypes.STRING,
+    isAdmin: DataTypes.BOOLEAN // 在SQL已經有該欄位,為了要操作該欄位就需要新增這個屬性
   }, {
     sequelize,
     modelName: 'User',

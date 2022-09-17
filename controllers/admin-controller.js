@@ -36,6 +36,36 @@ const adminController = {
         res.render('admin/book', { book })
       })
       .catch(err => next(err))
+  },
+  editBook: (req, res, next) => {
+    Book.findByPk(req.params.id, {
+      raw: true
+    })
+      .then(book => {
+        if (!book) throw new Error("Book didn't exist!")
+        res.render('admin/edit-book', { book })
+      })
+      .catch(err => next(err))
+  },
+  putBook: (req, res, next) => {
+    const { name, isbn, author, publisher, description } = req.body
+    if (!name) throw new Error('Book name is required!')
+    Book.findByPk(req.params.id)
+      .then(book => {
+        if (!book) throw new Error("Book did't exist!")
+        return book.update({
+          name,
+          isbn,
+          author,
+          publisher,
+          description
+        })
+      })
+      .then(() => {
+        req.flash('success_messages', 'book was successfully to update')
+        res.redirect('/admin/books')
+      })
+      .catch(err => next(err))
   }
 }
 module.exports = adminController

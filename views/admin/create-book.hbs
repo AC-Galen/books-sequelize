@@ -2,25 +2,5 @@
   <div class="mb-4 text-center">
     <h1 class="h3 font-weight-normal mb-3">新增書本</h1>
   </div>
-  <div class="form-row mb-3">
-    <label class="form-label" for="name">Name</label>
-    <input class="form-control" type="text" name="name" id="name" placeholder="Enter name" required>
-  </div>
-  <div class="form-row mb-3">
-    <label class="form-label" for="isbn">ISBN</label>
-    <input class="form-control" type="text" name="isbn" id="isbn" placeholder="Enter ISBN">
-  </div>
-  <div class="form-row mb-3">
-    <label class="form-label" for="author">Author</label>
-    <input class="form-control" type="text" name="author" id="author" placeholder="Enter author">
-  </div>
-  <div class="form-row mb-3">
-    <label class="form-label" for="publisher">Publisher</label>
-    <input class="form-control" type="text" name="publisher" id="publisher" placeholder="Enter publisher">
-  </div>
-  <div class="form-row mb-3">
-    <label class="form-label" for="description">Description</label>
-    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  {{> admin-book-form}}
 </form>

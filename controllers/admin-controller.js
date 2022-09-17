@@ -26,6 +26,16 @@ const adminController = {
         res.redirect('/admin/books')
       })
       .catch(err => next(err))
+  },
+  getBook: (req, res, next) => {
+    Book.findByPk(req.params.id, { // 去資料庫找id
+      raw: true // 找到後整理格式並回傳(轉換成JS原生物件)
+    })
+      .then(book => {
+        if (!book) throw new Error("Book didn't exist!")
+        res.render('admin/book', { book })
+      })
+      .catch(err => next(err))
   }
 }
 module.exports = adminController

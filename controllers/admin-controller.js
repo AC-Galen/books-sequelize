@@ -66,6 +66,15 @@ const adminController = {
         res.redirect('/admin/books')
       })
       .catch(err => next(err))
+  },
+  deleteBook: (req, res, next) => {
+    return Book.findByPk(req.params.id)
+      .then(book => {
+        if (!book) throw new Error("Book didn't exist!")
+        return book.destroy() // sequelize 提供的destroy()方法刪除資料,刪除時不需要加{raw:true}
+      })
+      .then(() => res.redirect('/admin/books'))
+      .catch(err => next(err))
   }
 }
 module.exports = adminController

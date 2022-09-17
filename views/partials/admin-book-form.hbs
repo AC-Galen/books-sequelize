@@ -18,4 +18,9 @@
     <label class="form-label" for="description">Description</label>
     <textarea class="form-control" id="description" name="description" rows="3">{{ book.description}}</textarea> <!-- textarea 不是用value -->
   </div>
+  <div class="form-row mb-3">
+    <label for="form-label" for="image">圖片</label>
+    <input class="form-control" type="file" class="form-control-file" id="image" name="image"> <!--input類型在file情況下,form標籤需要多一項屬性設定-->
+  </div>
   <button type="submit" class="btn btn-primary">提交</button>
+  <a class="btn btn-outline-secondary" href="javascript:history.back()">返回</a>

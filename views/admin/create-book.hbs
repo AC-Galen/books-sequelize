@@ -1,4 +1,4 @@
-<form action="/admin/books" method="POST">
+<form action="/admin/books" method="POST" enctype="multipart/form-data"> <!--表單包含input type="file",要將格式改成multipart/form-data,才能將圖片POST上去,透過form設定content-type時會用的屬性名:enctype-->
   <div class="mb-4 text-center">
     <h1 class="h3 font-weight-normal mb-3">新增書本</h1>
   </div>

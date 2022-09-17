@@ -1,4 +1,5 @@
 const { Book } = require('../models')
+const { localFileHandler } = require('../helpers/file-helper')
 
 const adminController = {
   getBooks: (req, res, next) => {
@@ -12,15 +13,19 @@ const adminController = {
     res.render('admin/create-book')
   },
   postBook: (req, res, next) => {
-    const { name, isbn, author, publisher, description } = req.body // 從req.body拿表單資料
-    if (!name) throw new Error('book name is required!') // name必填,否則就會在畫面提示錯誤
-    Book.create({
-      name,
-      isbn,
-      author,
-      publisher,
-      description
-    })
+    const { name, isbn, author, publisher, description } = req.body
+    if (!name) throw new Error('book name is required!')
+    const { file } = req // 把檔案拿出
+    localFileHandler(file) // 把拿出的檔案給file-helper處理
+      .then(filePath => Book.create({ // 在create這筆資料
+        name,
+        isbn,
+        author,
+        publisher,
+        description,
+        image: filePath || null // 若filePath值的檔案路徑字串(使用者上傳就會被判定為TruThy),就將image的直射為檔案路徑,如果為空(判斷沒有上傳,也就是沒有路徑,就會判定為Falsy),就將image直射為null
+      }))
+
       .then(() => {
         req.flash('success_messages', 'Book was successfully created')
         res.redirect('/admin/books')
@@ -50,15 +55,20 @@ const adminController = {
   putBook: (req, res, next) => {
     const { name, isbn, author, publisher, description } = req.body
     if (!name) throw new Error('Book name is required!')
-    Book.findByPk(req.params.id)
-      .then(book => {
+    const { file } = req // 取出檔案
+    Promise.all([ // 非同步
+      Book.findByPk(req.params.id), // 對照資料庫看有沒有這本書
+      localFileHandler(file) // 把檔案傳到file-helper處理
+    ])
+      .then(([book, filePath]) => { // 兩件事都結束後
         if (!book) throw new Error("Book did't exist!")
-        return book.update({
+        return book.update({ // 修改這筆資料
           name,
           isbn,
           author,
           publisher,
-          description
+          description,
+          image: filePath || null // 如果 filePath 是 Truthy (使用者有上傳新照片) 就用 filePath，是 Falsy (使用者沒有上傳新照片) 就沿用原本資料庫內的值
         })
       })
       .then(() => {

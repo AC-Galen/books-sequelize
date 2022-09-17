@@ -4,7 +4,7 @@ const authenticated = (req, res, next) => {
   if (ensureAuthenticated(req)) { // 判斷是否有登入,有就往下走
     return next()
   }
-  res.redirect('/sign') // 沒有就丟回登入頁面
+  res.redirect('/signin') // 沒有就丟回登入頁面
 }
 const authenticatedAdmin = (req, res, next) => {
   if (ensureAuthenticated(req)) {

@@ -9,6 +9,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('User', 'is_admin') // 把User 資料庫中is_admin的欄位刪除
+    await queryInterface.removeColumn('Users', 'is_admin') // 把User 資料庫中is_admin的欄位刪除
   }
 }

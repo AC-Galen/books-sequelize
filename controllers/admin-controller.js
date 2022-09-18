@@ -1,5 +1,5 @@
 const { Book } = require('../models')
-const { localFileHandler } = require('../helpers/file-helper')
+const { imgurFileHandler } = require('../helpers/file-helper')
 
 const adminController = {
   getBooks: (req, res, next) => {
@@ -16,7 +16,7 @@ const adminController = {
     const { name, isbn, author, publisher, description } = req.body
     if (!name) throw new Error('book name is required!')
     const { file } = req // 把檔案拿出
-    localFileHandler(file) // 把拿出的檔案給file-helper處理
+    imgurFileHandler(file) // 把拿出的檔案給file-helper處理
       .then(filePath => Book.create({ // 在create這筆資料
         name,
         isbn,
@@ -58,7 +58,7 @@ const adminController = {
     const { file } = req // 取出檔案
     Promise.all([ // 非同步
       Book.findByPk(req.params.id), // 對照資料庫看有沒有這本書
-      localFileHandler(file) // 把檔案傳到file-helper處理
+      imgurFileHandler(file) // 把檔案傳到file-helper處理
     ])
       .then(([book, filePath]) => { // 兩件事都結束後
         if (!book) throw new Error("Book did't exist!")

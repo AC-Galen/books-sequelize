@@ -1,10 +1,12 @@
-const { Book } = require('../models')
+const { Book, User, Category } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helper')
 
 const adminController = {
   getBooks: (req, res, next) => {
     Book.findAll({
-      raw: true
+      raw: true,
+      nest: true, // 把database拿到的資料進行整理,方便後續取用
+      include: [Category] // 傳入model物件需要透過include把關聯資料拉進來,再把資料給findAll的回傳值內
     })
       .then(books => res.render('admin/books', { books }))
       .catch(err => next(err))
@@ -34,7 +36,9 @@ const adminController = {
   },
   getBook: (req, res, next) => {
     Book.findByPk(req.params.id, { // 去資料庫找id
-      raw: true // 找到後整理格式並回傳(轉換成JS原生物件)
+      raw: true, // 找到後整理格式並回傳(轉換成JS原生物件)
+      nest: true,
+      include: [Category]
     })
       .then(book => {
         if (!book) throw new Error("Book didn't exist!")

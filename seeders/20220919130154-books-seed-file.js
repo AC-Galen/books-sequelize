@@ -2,7 +2,7 @@
 const { faker } = require('@faker-js/faker')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // 查詢Categories 的 id有哪些
+    // 查詢Categories 的 id有哪些(raw SQL),也可用Category.findAll查詢
     const categories = await queryInterface.sequelize.query(
       'SELECT id FROM Categories;',
       { type: queryInterface.sequelize.QueryTypes.SELECT }

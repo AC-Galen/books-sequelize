@@ -1,4 +1,4 @@
-const { Book, User, Category } = require('../models')
+const { Book, Category } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helper')
 
 const adminController = {
@@ -11,11 +11,15 @@ const adminController = {
       .then(books => res.render('admin/books', { books }))
       .catch(err => next(err))
   },
-  createBook: (req, res) => {
-    res.render('admin/create-book')
+  createBook: (req, res, next) => {
+    return Category.findAll({
+      raw: true
+    })
+      .then(categories => res.render('admin/create-book', { categories }))
+      .catch(err => next(err))
   },
   postBook: (req, res, next) => {
-    const { name, isbn, author, publisher, description } = req.body
+    const { name, isbn, author, publisher, description, categoryId } = req.body
     if (!name) throw new Error('book name is required!')
     const { file } = req // 把檔案拿出
     imgurFileHandler(file) // 把拿出的檔案給file-helper處理
@@ -25,7 +29,8 @@ const adminController = {
         author,
         publisher,
         description,
-        image: filePath || null // 若filePath值的檔案路徑字串(使用者上傳就會被判定為TruThy),就將image的直射為檔案路徑,如果為空(判斷沒有上傳,也就是沒有路徑,就會判定為Falsy),就將image直射為null
+        image: filePath || null, // 若filePath值的檔案路徑字串(使用者上傳就會被判定為TruThy),就將image的直射為檔案路徑,如果為空(判斷沒有上傳,也就是沒有路徑,就會判定為Falsy),就將image直射為null
+        categoryId
       }))
 
       .then(() => {
@@ -47,17 +52,18 @@ const adminController = {
       .catch(err => next(err))
   },
   editBook: (req, res, next) => {
-    Book.findByPk(req.params.id, {
-      raw: true
-    })
-      .then(book => {
+    Promise.all([
+      Book.findByPk(req.params.id, { raw: true }),
+      Category.findAll({ raw: true })
+    ])
+      .then(([book, categories]) => {
         if (!book) throw new Error("Book didn't exist!")
-        res.render('admin/edit-book', { book })
+        res.render('admin/edit-book', { book, categories })
       })
       .catch(err => next(err))
   },
   putBook: (req, res, next) => {
-    const { name, isbn, author, publisher, description } = req.body
+    const { name, isbn, author, publisher, description, categoryId } = req.body
     if (!name) throw new Error('Book name is required!')
     const { file } = req // 取出檔案
     Promise.all([ // 非同步
@@ -72,7 +78,8 @@ const adminController = {
           author,
           publisher,
           description,
-          image: filePath || null // 如果 filePath 是 Truthy (使用者有上傳新照片) 就用 filePath，是 Falsy (使用者沒有上傳新照片) 就沿用原本資料庫內的值
+          image: filePath || null, // 如果 filePath 是 Truthy (使用者有上傳新照片) 就用 filePath，是 Falsy (使用者沒有上傳新照片) 就沿用原本資料庫內的值
+          categoryId
         })
       })
       .then(() => {

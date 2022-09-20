@@ -11,6 +11,9 @@ router.put('/books/:id', upload.single('image'), adminController.putBook)
 router.delete('/books/:id', adminController.deleteBook)
 router.get('/books', adminController.getBooks)
 router.post('/books', upload.single('image'), adminController.postBook)
+
+router.patch('/users/:id', adminController.patchUser)
+router.get('/users', adminController.getUsers)
 router.use('/', (req, res) => res.redirect('/admin/books'))
 
 module.exports = router

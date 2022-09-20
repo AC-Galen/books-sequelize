@@ -3,6 +3,7 @@ const router = express.Router()
 
 const upload = require('../../middleware/multer')
 const adminController = require('../../controllers/admin-controller')
+const categoryController = require('../../controllers/category-controller')
 
 router.get('/books/create', adminController.createBook)
 router.get('/books/:id/edit', adminController.editBook)
@@ -14,6 +15,7 @@ router.post('/books', upload.single('image'), adminController.postBook)
 
 router.patch('/users/:id', adminController.patchUser)
 router.get('/users', adminController.getUsers)
+router.get('/categories', categoryController.getCategories)
 router.use('/', (req, res) => res.redirect('/admin/books'))
 
 module.exports = router

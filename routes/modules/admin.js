@@ -15,7 +15,9 @@ router.post('/books', upload.single('image'), adminController.postBook)
 
 router.patch('/users/:id', adminController.patchUser)
 router.get('/users', adminController.getUsers)
+
 router.get('/categories', categoryController.getCategories)
+router.post('/categories', categoryController.postCategory)
 router.use('/', (req, res) => res.redirect('/admin/books'))
 
 module.exports = router

@@ -15,6 +15,17 @@ const bookController = {
         books: data
       })
     })
+  },
+  getBook: (req, res, next) => {
+    return Book.findByPk(req.params.id, {
+      include: Category,
+      raw: true
+    })
+      .then(book => {
+        if (!book) throw new Error("Book didn't exist!")
+        res.render('book', { book })
+      })
+      .catch(err => next(err))
   }
 }
 module.exports = bookController

@@ -18,6 +18,7 @@ router.get('/signup', userController.signUpPage)
 router.post('/signup', userController.signUp)
 
 router.get('/logout', userController.logout)
+router.get('/books/:id', authenticated, bookController.getBook)
 router.get('/books', authenticated, bookController.getBooks)
 router.use('/', (req, res) => res.redirect('/books'))
 router.use('/', generalErrorHandler)

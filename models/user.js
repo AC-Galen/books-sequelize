@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate (models) {
       // define association here
+      User.hasMany(models.Comment, { foreignKey: 'userId' }) // User資料庫有很多評論(model.Comment), 連接外鍵名(userId)
     }
   };
   User.init({

@@ -1,4 +1,4 @@
-const { Book, Category } = require('../models')
+const { Book, Category, Comment, User } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const bookController = {
@@ -37,7 +37,7 @@ const bookController = {
   },
   getBook: (req, res, next) => {
     return Book.findByPk(req.params.id, {
-      include: Category,
+      include: [Category, { model: Comment, include: User }], // 項目變多時改用陣列
       nest: true
     })
       .then(book => {

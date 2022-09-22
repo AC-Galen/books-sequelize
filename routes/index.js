@@ -24,6 +24,7 @@ router.get('/books/:id', authenticated, bookController.getBook)
 router.get('/books/:id/dashboard', authenticated, bookController.getDashboard)
 router.get('/books', authenticated, bookController.getBooks)
 
+router.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
 router.post('/comments', authenticated, commentController.postComment)
 router.use('/', (req, res) => res.redirect('/books'))
 router.use('/', generalErrorHandler)

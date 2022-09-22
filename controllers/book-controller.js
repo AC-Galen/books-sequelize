@@ -38,7 +38,6 @@ const bookController = {
   getBook: (req, res, next) => {
     return Book.findByPk(req.params.id, {
       include: [Category, { model: Comment, include: User }], // 項目變多時改用陣列
-      nest: true
     })
       .then(book => {
         if (!book) throw new Error("book didn't exist!")
@@ -49,13 +48,11 @@ const bookController = {
   },
   getDashboard: (req, res, next) => {
     return Book.findByPk(req.params.id, {
-      include: Category,
-      nest: true,
-      raw: true
+      include: Category
     })
       .then(book => {
         if (!book) throw new Error("Book didn't exist!")
-        return res.render('dashboard', { book })
+        return res.render('dashboard', { book: book.toJSON() })
       })
       .catch(err => next(err))
   }

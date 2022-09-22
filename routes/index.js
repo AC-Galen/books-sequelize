@@ -6,6 +6,7 @@ const admin = require('./modules/admin')
 
 const bookController = require('../controllers/book-controller')
 const userController = require('../controllers/user-controller')
+const commentController = require('../controllers/comment-controller')
 
 const { authenticated, authenticatedAdmin } = require('../middleware/auth')
 const { generalErrorHandler } = require('../middleware/error-handler')
@@ -22,6 +23,8 @@ router.get('/logout', userController.logout)
 router.get('/books/:id', authenticated, bookController.getBook)
 router.get('/books/:id/dashboard', authenticated, bookController.getDashboard)
 router.get('/books', authenticated, bookController.getBooks)
+
+router.post('/comments', authenticated, commentController.postComment)
 router.use('/', (req, res) => res.redirect('/books'))
 router.use('/', generalErrorHandler)
 module.exports = router

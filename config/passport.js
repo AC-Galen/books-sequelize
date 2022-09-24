@@ -1,8 +1,8 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const bcrypt = require('bcryptjs')
-const db = require('../models')
-const User = db.User
+const { User, Book } = require('../models')
+
 // 設定passport strategy
 passport.use(new LocalStrategy(
   { // 客製化使用者資料
@@ -25,11 +25,14 @@ passport.use(new LocalStrategy(
 passport.serializeUser((user, cb) => {
   cb(null, user.id)
 })
-passport.deserializeUser((id, cb) => {
-  User.findByPk(id).then(user => {
-    user = user.toJSON() // 利用toJSON 將物件格式整理,如果沒有整理,在前端是無法簡單拿到資料的
-    return cb(null, user)
+passport.deserializeUser((id, cb) => { //  反序列
+  return User.findByPk(id, { // 從這邊拿到使用者的資料,所以變動
+    include: [
+      { model: Book, as: 'FavoritedBooks' } // as 要引入的關係
+    ]
   })
+    .then(user => cb(null, user.toJSON()))
+    .catch(err => cb(err))
 })
 
 module.exports = passport

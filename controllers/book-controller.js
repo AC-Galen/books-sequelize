@@ -37,7 +37,7 @@ const bookController = {
   },
   getBook: (req, res, next) => {
     return Book.findByPk(req.params.id, {
-      include: [Category, { model: Comment, include: User }], // 項目變多時改用陣列
+      include: [Category, { model: Comment, include: User }] // 項目變多時改用陣列
     })
       .then(book => {
         if (!book) throw new Error("book didn't exist!")

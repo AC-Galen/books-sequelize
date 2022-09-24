@@ -1,0 +1,16 @@
+<form action="/users/{{user.id}}?_method=PUT" method="POST" enctype="multipart/form-data">
+
+<div class="form-row mb-3">
+  <label for="name" class="form-label">Name</label>
+  <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="{{ user.name }}" required>
+</div>
+
+<div class="form-row mb-3">
+  <label for="image" class="form-label">Image</label>
+  <input type="file" class="form-control" id="mage" class="form-control-file" name="image">
+</div>
+
+<button type="submit" class="btn btn-primary">submit</button>
+<a class="btn btn-outline-secondary" href="javascript:history.back()">返回</a>
+
+</form>

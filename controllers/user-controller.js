@@ -1,9 +1,8 @@
 const bcrypt = require('bcryptjs')
-const db = require('../models')
 const { getUser } = require('../helpers/auth-helpers')
 const { imgurFileHandler } = require('../helpers/file-helper')
 
-const { User, Comment, Book } = db
+const { User, Comment, Book, Favorite } = require('../models')
 
 const userController = {
   signUpPage: (req, res) => {
@@ -80,6 +79,42 @@ const userController = {
         req.flash('success_messages', '使用者資料編輯成功')
         res.redirect(`/users/${id}`)
       })
+      .catch(err => next(err))
+  },
+  addFavorite: (req, res, next) => {
+    const { bookId } = req.params
+    return Promise.all([
+      Book.findByPk(bookId),
+      Favorite.findOne({
+        where: {
+          userId: req.user.id,
+          bookId
+        }
+      })
+    ])
+      .then(([book, favorite]) => {
+        if (!book) throw new Error("Book didn't exist!")
+        if (favorite) throw new Error('You have favorited this book!')
+        return Favorite.create({
+          userId: req.user.id,
+          bookId
+        })
+      })
+      .then(() => res.redirect('back'))
+      .catch(err => next(err))
+  },
+  removeFavorite: (req, res, next) => {
+    return Favorite.findOne({
+      where: { // 確認收藏關聯是否存在
+        userId: req.user.id,
+        bookId: req.params.bookId
+      }
+    })
+      .then(favorite => {
+        if (!favorite) throw new Error("You haven't favorited this book")
+        return favorite.destroy()
+      })
+      .then(() => res.redirect('back'))
       .catch(err => next(err))
   }
 

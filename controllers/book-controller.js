@@ -55,6 +55,31 @@ const bookController = {
         return res.render('dashboard', { book: book.toJSON() })
       })
       .catch(err => next(err))
+  },
+  getFeeds: (req, res, next) => {
+    Promise.all([ // 非同步
+      Book.findAll({
+        limit: 10, // 指定數量
+        order: [['createdAt', 'DESC']], // 傳入要排序的欄位
+        include: [Category], // 指定引入的model
+        raw: true,
+        nest: true
+      }),
+      Comment.findAll({
+        limit: 10,
+        order: [['createdAt', 'DESC']],
+        include: [User, Book],
+        raw: true,
+        nest: true
+      })
+    ])
+      .then(([books, comments]) => {
+        res.render('feeds', {
+          books,
+          comments
+        })
+      })
+      .catch(err => next(err))
   }
 
 }

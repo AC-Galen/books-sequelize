@@ -16,17 +16,28 @@
   </div>
   <div class="col-md-8">
     <p style="white-space: break-spaces;">{{book.description}}</p>
-    <a href="/books/{{book.id}}/dashboard" class="btn btn-outline-primary">dashboard</a>
-    
-    {{#if isFavorited }}
-    <form action="/favorite/{{book.id}}?_method=DELETE" method="POST" style="display: contents;">
-      <button type="submit" class="btn btn-danger">移除最愛</button>
-    </form>
-    {{else}}
-    <form action="/favorite/{{book.id}}" method="POST" style="display: contents;">
-      <button type="submit" class="btn btn-primary">加到最愛</button>
-    </form>
-    {{/if}}
+      <div class="d-flex">
+      <a href="/books/{{book.id}}/dashboard" class="btn btn-outline-primary  m-1">dashboard</a>
+        {{#if isFavorited }}
+        <form action="/favorite/{{book.id}}?_method=DELETE" method="POST" style="display: contents;">
+          <button type="submit" class="btn btn-danger  m-1">移除最愛</button>
+        </form>
+        {{else}}
+        <form action="/favorite/{{book.id}}" method="POST" style="display: contents;">
+          <button type="submit" class="btn btn-primary m-1">加到最愛</button>
+        </form>
+        {{/if}}
+        
+        {{#if isliked}}
+        <form action="/like/{{book.id}}?_method=DELETE" method="POST" style="display: contents;">
+          <button type="submit" class="btn btn-danger m-1">Unlike</button>
+        </form>
+        {{else}}
+        <form action="/like/{{book.id}}" method="POST" style="display: contents;" >
+          <button type="submit" class="btn btn-primary m-1">Like</button>
+        </form>
+        {{/if}}
+      </div>
   </div>
   <hr>
 </div>

@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs')
 const { getUser } = require('../helpers/auth-helpers')
 const { imgurFileHandler } = require('../helpers/file-helper')
 
-const { User, Comment, Book, Favorite } = require('../models')
+const { User, Comment, Book, Favorite, Like } = require('../models')
 
 const userController = {
   signUpPage: (req, res) => {
@@ -116,7 +116,42 @@ const userController = {
       })
       .then(() => res.redirect('back'))
       .catch(err => next(err))
+  },
+  addLike: (req, res, next) => {
+    const { bookId } = req.params
+    return Promise.all([
+      Book.findByPk(bookId),
+      Like.findOne({
+        where: {
+          userId: req.user.id,
+          bookId
+        }
+      })
+    ])
+      .then(([book, like]) => {
+        if (!book) throw new Error("Book didn't exist!")
+        if (like) throw new Error('You have liked this Book!')
+        return Like.create({
+          userId: req.user.id,
+          bookId
+        })
+      })
+      .then(() => res.redirect('book'))
+      .catch(err => next(err))
+  },
+  removeLike: (req, res, next) => {
+    return Like.findOne({
+      where: {
+        userId: req.user.id,
+        BookId: req.params.BookId
+      }
+    })
+      .then(like => {
+        if (!like) throw new Error("You haven't liked this Book!")
+        return like.destroy()
+      })
+      .then(() => res.redirect('back'))
+      .catch(err => next(err))
   }
-
 }
 module.exports = userController

@@ -36,6 +36,9 @@ router.post('/comments', authenticated, commentController.postComment)
 router.post('/favorite/:bookId', authenticated, userController.addFavorite)
 router.delete('/favorite/:bookId', authenticated, userController.removeFavorite)
 
+router.post('/like/:bookId', authenticated, userController.addLike)
+router.delete('/like/:bookId', authenticated, userController.removeLike)
+
 router.use('/', (req, res) => res.redirect('/books'))
 router.use('/', generalErrorHandler)
 module.exports = router

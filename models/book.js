@@ -17,6 +17,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'bookId', // 對 Favorite 表設立外鍵(FK)
         as: 'FavoritedUsers' // 幫這個關聯取名
       })
+      Book.belongsToMany(models.User, {
+        through: models.Like,
+        foreignKey: 'bookId',
+        as: 'LikedUsers'
+      })
     }
   };
   Book.init({

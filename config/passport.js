@@ -28,7 +28,8 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((id, cb) => { //  反序列
   return User.findByPk(id, { // 從這邊拿到使用者的資料,所以變動
     include: [
-      { model: Book, as: 'FavoritedBooks' } // as 要引入的關係
+      { model: Book, as: 'FavoritedBooks' }, // as 要引入的關係(名字)
+      { model: Book, as: 'LikedBooks' }
     ]
   })
     .then(user => cb(null, user.toJSON()))

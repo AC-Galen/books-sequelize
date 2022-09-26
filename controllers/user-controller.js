@@ -140,10 +140,11 @@ const userController = {
       .catch(err => next(err))
   },
   removeLike: (req, res, next) => {
+    const { bookId } = req.params
     return Like.findOne({
       where: {
         userId: req.user.id,
-        BookId: req.params.BookId
+        bookId
       }
     })
       .then(like => {

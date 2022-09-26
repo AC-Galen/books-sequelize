@@ -40,6 +40,9 @@ router.delete('/favorite/:bookId', authenticated, userController.removeFavorite)
 router.post('/like/:bookId', authenticated, userController.addLike)
 router.delete('/like/:bookId', authenticated, userController.removeLike)
 
+router.post('/following/:userId', authenticated, userController.addFollowing)
+router.delete('/following/:userId', authenticated, userController.removeFollowing)
+
 router.use('/', (req, res) => res.redirect('/books'))
 router.use('/', generalErrorHandler)
 module.exports = router

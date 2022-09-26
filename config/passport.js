@@ -29,7 +29,9 @@ passport.deserializeUser((id, cb) => { //  反序列
   return User.findByPk(id, { // 從這邊拿到使用者的資料,所以變動
     include: [
       { model: Book, as: 'FavoritedBooks' }, // as 要引入的關係(名字)
-      { model: Book, as: 'LikedBooks' }
+      { model: Book, as: 'LikedBooks' },
+      { model: User, as: 'Followers' }, // 加入後就可用req.user取得需要的資料
+      { model: User, as: 'Followings' }
     ]
   })
     .then(user => cb(null, user.toJSON()))

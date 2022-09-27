@@ -26,6 +26,7 @@ router.get('/users/:id', authenticated, userController.getUser)
 router.get('/users/:id/edit', authenticated, userController.editUser)
 router.put('/users/:id', authenticated, upload.single('image'), userController.putUser)
 
+router.get('/books/top', authenticated, bookController.getTopBooks)
 router.get('/books/feeds', authenticated, bookController.getFeeds)
 router.get('/books/:id/dashboard', authenticated, bookController.getDashboard)
 router.get('/books/:id', authenticated, bookController.getBook)

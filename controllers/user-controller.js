@@ -136,7 +136,7 @@ const userController = {
           bookId
         })
       })
-      .then(() => res.redirect('book'))
+      .then(() => res.redirect('back'))
       .catch(err => next(err))
   },
   removeLike: (req, res, next) => {

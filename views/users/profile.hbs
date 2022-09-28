@@ -1,31 +1,79 @@
-<div class="card mb-3" style="max-width: 540px;">
+<div class="card border-primary rounded" >
   <div class="row g-0">
     <div class="col-md-4">
-      <img src="{{ targetUser.image }}" class="img-fluid rounded-start" alt="...">
+      <img src="{{ targetUser.image }}" class="img-fluid rounded-start " alt="...">
     </div>
     <div class="col-md-8">
       <div class="card-body">
         <h5 class="card-title">{{ targetUser.name }}</h5>
         <p class="card-text">{{ targetUser.email }}</p>
-        <p>{{targetUser.Comments.length}} 已評論書籍</p>
+        <p>{{comments.length}} 已評論書籍</p>
+        <p>{{targetUser.FavoritedBooks.length}} 收藏的書籍</p>
+        <p>{{targetUser.Followings.length}} followings(追蹤者)</p>
+        <p>{{targetUser.Followers.length}} followers(追蹤者)</p>
         {{#ifCond targetUser.id user.id}}
-        <a class="btn btn-primary" href="/users/{{user.id}}/edit">edit</a>
+        <a class="btn btn-primary" href="/users/{{user.id}}/edit">修改</a>
         {{/ifCond}}
       </div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-header"> {{targetUser.Comments.length}} 已評論書籍</div>
+</div>
+
+  <div class="card mt-3 w-50">
+    <div class="card-header">{{targetUser.Followings.length}} followings(追蹤者)</div>
     <div class="ps-3">
-      {{#if targetUser.Comments}}
-        {{#each targetUser.Comments}}
-        <a href="/books/{{this.Book.id}}" style="text-decoration: none;">
-          <img src="{{this.Book.image}}" style="width: 80px; height: 80px;">
-        </a>
-        {{/each}}
+      {{#if targetUser.Followings}}
+      {{#each targetUser.Followings}}
+      <a href="/books/{{this.id}}" style="text-decoration: none;">
+        <img src="{{this.image}}" style="width: 80px; height: 80px;">
+      </a>
+      {{/each}}
       {{else}}
       <span>未評論任何書籍</span>
       {{/if}}
     </div>
   </div>
-</div>
+  
+  <div class="card mt-3 w-50">
+    <div class="card-header">{{targetUser.Followers.length}} followers(追蹤者)</div>
+    <div class="ps-3">
+      {{#if targetUser.Followers}}
+      {{#each targetUser.Followers}}
+      <a href="/books/{{this.id}}" style="text-decoration: none;">
+        <img src="{{this.image}}" style="width: 80px; height: 80px;">
+      </a>
+      {{/each}}
+      {{else}}
+      <span>未評論任何書籍</span>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="card mt-3 w-50">
+    <div class="card-header"> {{comments.length}} 已評論書籍</div>
+    <div class="ps-3">
+      {{#if comments}}
+      {{#each comments}}
+      <a href="/books/{{this.Book.id}}" style="text-decoration: none;">
+        <img src="{{this.Book.image}}" style="width: 80px; height: 80px;">
+      </a>
+      {{/each}}
+      {{else}}
+      <span>未評論任何書籍</span>
+      {{/if}}
+    </div>
+  </div>
+  <div class="card mt-3 w-50">
+    <div class="card-header">收藏的書籍</div>
+    <div class="ps-3">
+      {{#if targetUser.FavoritedBooks}}
+      {{#each targetUser.FavoritedBooks}}
+      <a href="/books/{{this.id}}" style="text-decoration: none;">
+        <img src="{{this.image}}" style="width: 80px; height: 80px;">
+      </a>
+      {{/each}}
+      {{else}}
+      <span>未評論任何書籍</span>
+      {{/if}}
+    </div>
+  </div>

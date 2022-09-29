@@ -1,5 +1,5 @@
-const { Book, Category, User } = require('../models')
-const { imgurFileHandler } = require('../helpers/file-helper')
+const { Book, Category, User } = require('../../models')
+const { imgurFileHandler } = require('../../helpers/file-helper')
 
 const adminController = {
   getBooks: (req, res, next) => {

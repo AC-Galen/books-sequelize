@@ -16,7 +16,7 @@ const PORT = process.env.PORT
 const { getUser } = require('./helpers/auth-helpers')
 const handlebarsHelpers = require('./helpers/handlebars-helper')
 
-const routes = require('./routes')
+const { pages } = require('./routes')
 
 app.engine('hbs', exphbs({ extname: '.hbs', helpers: handlebarsHelpers }))
 app.set('view engine', 'hbs')
@@ -36,7 +36,7 @@ app.use((req, res, next) => { // 設定success和warning信息
   next()
 })
 
-app.use(routes)
+app.use(pages)
 
 app.listen(PORT, () => {
   console.log(`App is running on http://localhost:${PORT}`)

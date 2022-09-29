@@ -1,5 +1,5 @@
-const { Book, Category, Comment, User } = require('../models')
-const { getOffset, getPagination } = require('../helpers/pagination-helper')
+const { Book, Category, Comment, User } = require('../../models')
+const { getOffset, getPagination } = require('../../helpers/pagination-helper')
 
 const bookController = {
   getBooks: (req, res, next) => {

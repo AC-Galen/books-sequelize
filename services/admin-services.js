@@ -9,6 +9,19 @@ const adminServices = {
     })
       .then(books => cb(null, { books }))
       .catch(err => cb(err))
+  },
+  deleteBook: (req, cb) => {
+    Book.findByPk(req.params.id)
+      .then(book => {
+        if (!book) {
+          const err = new Error("Book didn't exist!")
+          err.status = 404
+          throw err
+        }
+        return book.destroy()
+      })
+      .then(deleteBook => cb(null, { book: deleteBook }))
+      .catch(err => cb(err))
   }
 }
 

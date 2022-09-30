@@ -1,15 +1,11 @@
+const adminServices = require('../../services/admin-services')
+
 const { Book, Category, User } = require('../../models')
 const { imgurFileHandler } = require('../../helpers/file-helper')
 
 const adminController = {
   getBooks: (req, res, next) => {
-    Book.findAll({
-      raw: true,
-      nest: true, // 把database拿到的資料進行整理,方便後續取用
-      include: [Category] // 傳入model物件需要透過include把關聯資料拉進來,再把資料給findAll的回傳值內
-    })
-      .then(books => res.render('admin/books', { books }))
-      .catch(err => next(err))
+    adminServices.getBooks(req, (err, data) => err ? next(err) : res.render('admin/books', data))
   },
   createBook: (req, res, next) => {
     return Category.findAll({

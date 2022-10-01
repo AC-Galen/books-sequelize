@@ -6,10 +6,12 @@ const admin = require('./modules/admin')
 
 const bookController = require('../../controllers/apis/book-controller')
 const userController = require('../../controllers/apis/user-controller')
+
+const { authenticated, authenticatedAdmin } = require('../../middleware/api-auth')
 const { apiErrorHandler } = require('../../middleware/error-handler')
 
-router.use('/admin', admin)
-router.get('/books', bookController.getBooks)
+router.use('/admin', authenticated, authenticatedAdmin, admin)
+router.get('/books', authenticated, bookController.getBooks)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn)
 router.use('/', apiErrorHandler)
 

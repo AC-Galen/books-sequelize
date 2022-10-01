@@ -1,7 +1,11 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
+const passportJWT = require('passport-jwt')
 const bcrypt = require('bcryptjs')
 const { User, Book } = require('../models')
+
+const JWTStrategy = passportJWT.Strategy
+const ExtractJWT = passportJWT.ExtractJwt
 
 // 設定passport strategy
 passport.use(new LocalStrategy(
@@ -21,6 +25,23 @@ passport.use(new LocalStrategy(
       })
   }
 ))
+
+const jwtOptions = { // 設定如何header 攜帶jwt用來製作簽章的字串，// 取哪找token，這指定了authorization header 裡的 bearer 項目
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET // 使用密鑰來檢查 token 是否經過纂改，也就是我們放進 process.env.JWT_SECRET 的 'bookSequelize' 字串，這組密鑰只有伺服器知道。
+}
+passport.use(new JWTStrategy(jwtOptions, (jwtPayload, cb) => {
+  User.findByPk(jwtPayload.id, {
+    include: [
+      { model: Book, as: 'FavoritedBooks' },
+      { model: Book, as: 'LikedBooks' },
+      { model: User, as: 'Followers' },
+      { model: User, as: 'Followings' }
+    ]
+  })
+    .then(user => cb(null, user))
+    .catch(err => cb(err))
+}))
 
 passport.serializeUser((user, cb) => {
   cb(null, user.id)

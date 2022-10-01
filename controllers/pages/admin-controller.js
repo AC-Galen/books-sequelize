@@ -90,14 +90,14 @@ const adminController = {
     return User.findByPk(req.params.id)
       .then(user => {
         if (!user) throw new Error("user didn't exist!")
-        if (user.email === 'root@example') {
-          req.flash('error_message', '禁止變更 root 權限')
+        if (user.email === 'root@example.com') {
+          req.flash('error_messages', '禁止變更 root 權限')
           return res.redirect('back')
         }
-        return user.update({ iaAdmin: !user.isAdmin })
+        return user.update({ isAdmin: !user.isAdmin })
       })
       .then(() => {
-        req.flash('success_message', '使用者權限變更成功')
+        req.flash('success_messages', '使用者權限變更成功')
         res.redirect('/admin/users')
       })
       .catch(err => next(err))

@@ -29,12 +29,24 @@ const bookController = {
       .catch(err => next(err))
   },
   getDashboard: (req, res, next) => {
-    return Book.findByPk(req.params.id, {
-      include: Category
-    })
-      .then(book => {
+    return Promise.all([
+      Book.findByPk(req.params.id, {
+        include: [Category,
+          { model: User, as: 'FavoritedUsers' },
+          { model: User, as: 'LikedUsers' }
+        ]
+      }),
+      Comment.findAll({
+        include: [Book],
+        where: { userId: req.user.id },
+        group: 'book_id',
+        raw: true,
+        nest: true
+      })
+    ])
+      .then(([book, comments]) => {
         if (!book) throw new Error("Book didn't exist!")
-        return res.render('dashboard', { book: book.toJSON() })
+        return res.render('dashboard', { book: book.toJSON(), comments })
       })
       .catch(err => next(err))
   },

@@ -2,7 +2,7 @@ const { Book, Category } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const booksServices = {
-  getBooks: (req, callback) => {
+  getBooks: (req, cb) => {
     const DEFAULT_LIMIT = 9 // 第一頁有9筆資料,可優化(讓使用者選擇每頁選擇N筆資料)
     const categoryId = Number(req.query.categoryId) || '' // 從網址拿下來的參數是字串,要轉成Number在操作
     const page = Number(req.query.page) || 1
@@ -30,14 +30,14 @@ const booksServices = {
           isFavorited: favoritedBooksId.includes(r.id), // 檢查是不是有被使用者收藏，有的話 isFavorited 就會是 true，否則會是 false，物件上就有一個 isFavorited 屬性，因此後面 Handlebars 在處理資料時，讓 Handlebars 可以用 if/else 去判斷要渲染哪一個按鈕
           isLiked: likedBookId.includes(r.id)
         }))
-        return callback(null, {
+        return cb(null, {
           books: data,
           categories,
           categoryId,
           pagination: getPagination(limit, page, books.count)
         })
       })
-      .catch(err => callback(err))
+      .catch(err => cb(err))
   }
 }
 

@@ -14,7 +14,7 @@ const adminServices = {
   postBook: (req, cb) => {
     const { name, isbn, author, publisher, description, categoryId } = req.body
     if (!name) throw new Error('book name is required!')
-    const { file } = req // 把檔案拿出
+    const { file } = req
     imgurFileHandler(file) // 把拿出的檔案給file-helper處理
       .then(filePath => Book.create({ // 在create這筆資料
         name,

@@ -1,5 +1,14 @@
+const userServices = require('../../services/user-services')
+
 const jwt = require('jsonwebtoken')
+
 const userController = {
+  signUpPage: (req, res, next) => {
+    res.render('signup')
+  },
+  signUp: (req, res, next) => {
+    userServices.signUp(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
+  },
   signIn: (req, res, next) => {
     try {
       const userData = req.user.toJSON()

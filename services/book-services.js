@@ -61,6 +61,70 @@ const booksServices = {
         })
       })
       .catch(err => cb(err))
+  },
+  getDashboard: (req, cb) => {
+    return Promise.all([
+      Book.findByPk(req.params.id, {
+        include: [Category,
+          { model: User, as: 'FavoritedUsers' },
+          { model: User, as: 'LikedUsers' }
+        ]
+      }),
+      Comment.findAll({
+        include: [Book],
+        where: { book_id: req.params.id },
+        raw: true,
+        nest: true
+      })
+    ])
+      .then(([book, comments]) => {
+        if (!book) throw new Error("Book didn't exist!")
+        return cb(null, { book: book.toJSON(), comments })
+      })
+      .catch(err => cb(err))
+  },
+  getFeeds: (req, cb) => {
+    Promise.all([ // 非同步
+      Book.findAll({
+        limit: 10, // 指定數量
+        order: [['createdAt', 'DESC']], // 傳入要排序的欄位
+        include: [Category], // 指定引入的model
+        raw: true,
+        nest: true
+      }),
+      Comment.findAll({
+        limit: 10,
+        order: [['createdAt', 'DESC']],
+        include: [User, Book],
+        raw: true,
+        nest: true
+      })
+    ])
+      .then(([books, comments]) => {
+        cb(null, {
+          books,
+          comments
+        })
+      })
+      .catch(err => cb(err))
+  },
+  getTopBooks: (req, cb) => {
+    return Book.findAll({
+      include: [{ model: User, as: 'FavoritedUsers' }]
+    })
+      .then(books => {
+        const result = books
+          .map(book => ({
+            ...book.toJSON(),
+            favoritedCount: book.FavoritedUsers.length,
+            isFavorited: req.user && req.user.FavoritedBooks
+              .some(b => b.id === book.id)
+          }))
+          .sort((a, b) => b.favoritedCount - a.favoritedCount)
+          .slice(0, 10)
+        cb(null, { books: result })
+      })
+      .catch(err => cb(err))
   }
 }
 

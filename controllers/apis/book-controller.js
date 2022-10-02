@@ -6,6 +6,15 @@ const bookController = {
   },
   getBook: (req, res, next) => {
     booksServices.getBook(req, (err, data) => err ? next(err) : res.json(data))
+  },
+  getDashboard: (req, res, next) => {
+    booksServices.getDashboard(req, (err, data) => err ? next(err) : res.json(data))
+  },
+  getFeeds: (req, res, next) => {
+    booksServices.getFeeds(req, (err, data) => err ? next(err) : res.json(data))
+  },
+  getTopBooks: (req, res, next) => {
+    booksServices.getTopBooks(req, (err, data) => err ? next(err) : res.json(data))
   }
 }
 

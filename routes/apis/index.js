@@ -17,6 +17,9 @@ router.use('/', apiErrorHandler)
 router.get('/signup', userController.signUpPage)
 router.post('/signup', userController.signUp)
 
+router.get('/books/top', authenticated, bookController.getTopBooks)
+router.get('/books/feeds', authenticated, bookController.getFeeds)
+router.get('/books/:id/dashboard', authenticated, bookController.getDashboard)
 router.get('/books/:id', authenticated, bookController.getBook)
 router.get('/books', authenticated, bookController.getBooks)
 

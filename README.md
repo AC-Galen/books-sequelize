@@ -82,3 +82,8 @@ App is running on http://localhost:3000
   "password": "12345678"
 }
 ```
+
+### 專案已部屬至heroku，但到2022年11月28日便會被消除
+```
+https://salty-castle-71166.herokuapp.com/signin
+```

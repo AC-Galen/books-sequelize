@@ -40,6 +40,15 @@ const adminServices = {
       })
       .then(deleteBook => cb(null, { book: deleteBook }))
       .catch(err => cb(err))
+  },
+  getBook: (req, cb) => {
+    Book.findByPk(req.params.id, { // 去資料庫找id
+      raw: true, // 找到後整理格式並回傳(轉換成JS原生物件)
+      nest: true,
+      include: [Category]
+    })
+      .then(book => cb(null, { book }))
+      .catch(err => cb(err))
   }
 }
 

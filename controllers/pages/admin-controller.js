@@ -24,16 +24,7 @@ const adminController = {
     })
   },
   getBook: (req, res, next) => {
-    Book.findByPk(req.params.id, { // 去資料庫找id
-      raw: true, // 找到後整理格式並回傳(轉換成JS原生物件)
-      nest: true,
-      include: [Category]
-    })
-      .then(book => {
-        if (!book) throw new Error("Book didn't exist!")
-        res.render('admin/book', { book })
-      })
-      .catch(err => next(err))
+    adminServices.getBook(req, (err, data) => err ? next(err) : res.render('admin/book', data))
   },
   editBook: (req, res, next) => {
     Promise.all([

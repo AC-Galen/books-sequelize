@@ -24,7 +24,7 @@
     <div class="ps-3">
       {{#if targetUser.Followings}}
       {{#each targetUser.Followings}}
-      <a href="/books/{{this.id}}" style="text-decoration: none;">
+      <a href="/users/{{this.id}}" style="text-decoration: none;">
         <img src="{{this.image}}" style="width: 80px; height: 80px;">
       </a>
       {{/each}}
@@ -39,7 +39,7 @@
     <div class="ps-3">
       {{#if targetUser.Followers}}
       {{#each targetUser.Followers}}
-      <a href="/books/{{this.id}}" style="text-decoration: none;">
+      <a href="/users/{{this.id}}" style="text-decoration: none;">
         <img src="{{this.image}}" style="width: 80px; height: 80px;">
       </a>
       {{/each}}

@@ -1,13 +1,11 @@
 {
   "name": "books-sequelize",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "lint": "eslint \"**/*.js\" --fix",
-    "test": "mocha tests --exit --recursive --timeout 5000"
+    "lint": "eslint \"**/*.js\" --fix"
   },
   "keywords": [],
   "author": "",

@@ -1,14 +1,38 @@
-const { Book, Category } = require('../models')
+const { Book, Category, Comment, User } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helper')
+const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const adminServices = {
   getBooks: (req, cb) => {
-    Book.findAll({
-      raw: true,
-      nest: true, // 把database拿到的資料進行整理,方便後續取用
-      include: [Category] // 傳入model物件需要透過include把關聯資料拉進來,再把資料給findAll的回傳值內
-    })
-      .then(books => cb(null, { books }))
+    const DEFAULT_LIMIT = 15
+    const categoryId = Number(req.query.categoryId) || ''
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || DEFAULT_LIMIT
+    const offset = getOffset(limit, page)
+    return Promise.all([ // 兩個資料表查詢結果都回傳後再接續後面的動作,所以用Promise.all
+      Book.findAndCountAll({
+        include: Category, // 運用include 一並拿出關聯的Category model
+        where: {
+          ...categoryId ? { categoryId } : {} // 檢查categoryId是否為空值
+        },
+        limit,
+        offset,
+        raw: true,
+        nest: true
+      }),
+      Category.findAll({ raw: true })
+    ])
+      .then(([books, categories]) => {
+        const data = books.rows.map(r => ({
+          ...r
+        }))
+        return cb(null, {
+          books: data,
+          categories,
+          categoryId,
+          pagination: getPagination(limit, page, books.count)
+        })
+      })
       .catch(err => cb(err))
   },
   postBook: (req, cb) => {
@@ -42,14 +66,16 @@ const adminServices = {
       .catch(err => cb(err))
   },
   getBook: (req, cb) => {
-    Book.findByPk(req.params.id, { // 去資料庫找id
-      raw: true, // 找到後整理格式並回傳(轉換成JS原生物件)
-      nest: true,
-      include: [Category]
+    return Book.findByPk(req.params.id, {
+      include: [Category,
+        { model: Comment, include: User }
+      ]
     })
-      .then(book => cb(null, { book }))
+      .then(book => {
+        if (!book) throw new Error("book didn't exist!")
+        return cb(null, { book: book.toJSON() })
+      })
       .catch(err => cb(err))
   }
 }
-
 module.exports = adminServices

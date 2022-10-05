@@ -12,10 +12,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate (models) {
       Book.belongsTo(models.Category, { foreignKey: 'categoryId' })
       Book.hasMany(models.Comment, { foreignKey: 'bookId' })
-      Book.belongsToMany(models.User, { // belongsToMany 表一對多
-        through: models.Favorite, // through(透過) Favorite 表建立關聯
-        foreignKey: 'bookId', // 對 Favorite 表設立外鍵(FK)
-        as: 'FavoritedUsers' // 幫這個關聯取名
+      Book.belongsToMany(models.User, {
+        through: models.Favorite,
+        foreignKey: 'bookId',
+        as: 'FavoritedUsers'
       })
       Book.belongsToMany(models.User, {
         through: models.Like,

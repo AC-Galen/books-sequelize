@@ -7,4 +7,4 @@ const ensureAuthenticated = req => {
 module.exports = {
   getUser,
   ensureAuthenticated
-} // 解構賦值,這邊export什麼,在其他地方的require就會是什麼
+}

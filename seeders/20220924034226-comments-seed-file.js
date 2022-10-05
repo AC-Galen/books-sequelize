@@ -12,7 +12,7 @@ module.exports = {
     )
     await queryInterface.bulkInsert('Comments',
       Array.from({ length: 10 }, () => ({
-        text: faker.lorem.text().substring(0, 5), // lorem(換行),顯示0-5個字串
+        text: faker.lorem.text().substring(0, 5),
         created_at: new Date(),
         updated_at: new Date(),
         user_id: users[Math.floor(Math.random() * users.length)].id,

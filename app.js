@@ -29,8 +29,8 @@ app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUniniti
 app.use(passport.initialize()) // 初始化passport
 app.use(passport.session()) // 啟動session功能
 app.use(flash())
-app.use('/upload', express.static(path.join(__dirname, 'upload'))) // 新增
-app.use((req, res, next) => { // 設定success和warning信息
+app.use('/upload', express.static(path.join(__dirname, 'upload')))
+app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
   res.locals.error_messages = req.flash('error_messages')
   res.locals.user = getUser(req)

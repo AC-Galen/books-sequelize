@@ -3,15 +3,15 @@ const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const booksServices = {
   getBooks: (req, cb) => {
-    const DEFAULT_LIMIT = 9 // 第一頁有9筆資料,可優化(讓使用者選擇每頁選擇N筆資料)
+    const DEFAULT_LIMIT = 9
     const categoryId = Number(req.query.categoryId) || '' // 從網址拿下來的參數是字串,要轉成Number在操作
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || DEFAULT_LIMIT
     const offset = getOffset(limit, page)
-    return Promise.all([ // 兩個資料表查詢結果都回傳後再接續後面的動作,所以用Promise.all
+    return Promise.all([
       Book.findAndCountAll({
         include: Category, // 運用include 一並拿出關聯的Category model
-        where: { // 查詢條件
+        where: {
           ...categoryId ? { categoryId } : {} // 檢查categoryId是否為空值
         },
         limit,
@@ -84,11 +84,11 @@ const booksServices = {
       .catch(err => cb(err))
   },
   getFeeds: (req, cb) => {
-    Promise.all([ // 非同步
+    Promise.all([
       Book.findAll({
         limit: 10, // 指定數量
         order: [['createdAt', 'DESC']], // 傳入要排序的欄位
-        include: [Category], // 指定引入的model
+        include: [Category],
         raw: true,
         nest: true
       }),

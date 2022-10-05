@@ -40,14 +40,14 @@ const adminController = {
   putBook: (req, res, next) => {
     const { name, isbn, author, publisher, description, categoryId } = req.body
     if (!name) throw new Error('Book name is required!')
-    const { file } = req // 取出檔案
-    Promise.all([ // 非同步
-      Book.findByPk(req.params.id), // 對照資料庫看有沒有這本書
+    const { file } = req
+    Promise.all([
+      Book.findByPk(req.params.id),
       imgurFileHandler(file) // 把檔案傳到file-helper處理
     ])
-      .then(([book, filePath]) => { // 兩件事都結束後
+      .then(([book, filePath]) => {
         if (!book) throw new Error("Book did't exist!")
-        return book.update({ // 修改這筆資料
+        return book.update({
           name,
           isbn,
           author,

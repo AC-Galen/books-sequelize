@@ -17,8 +17,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Comment.init({
     text: DataTypes.STRING,
-    userId: DataTypes.INTEGER, // 改小駝峰式命名
-    bookId: DataTypes.INTEGER // 改小駝峰式命名
+    userId: DataTypes.INTEGER,
+    bookId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Comment',

@@ -9,7 +9,7 @@ const booksServices = {
         if (user) throw new Error('此信箱已經有註冊過了')
         return bcrypt.hash(req.body.password, 10) // 前面加return,promise會在同一層且避免變成兩個非同步事件,無法確定哪個先完成
       })
-      .then(hash => User.create({ // 上面無錯誤,就會將使用者資料寫入資料庫
+      .then(hash => User.create({
         name: req.body.name,
         email: req.body.email,
         password: hash

@@ -22,15 +22,15 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         as: 'LikedBooks'
       })
-      User.belongsToMany(User, { // sequelize了解這是個一對多關聯(一個使用者可以被很多使用者追蹤)
-        through: models.Followship, // 透過Followship model查資料
-        foreignKey: 'followingId', // 到了 Followship model 以後，要把現在的 user.id 對應到 Followship 裡的 followingId，假設 user.id 是 5，就去搜尋所有 followingId 是 5 的資料
-        as: 'Followers' // 給這些使用者一個別名叫做 Followers，讓我們在 controller 以及 view 裡面可以用這個別名存取到(被追蹤)
+      User.belongsToMany(User, {
+        through: models.Followship,
+        foreignKey: 'followingId',
+        as: 'Followers'
       })
       User.belongsToMany(User, {
         through: models.Followship,
         foreignKey: 'followerId',
-        as: 'Followings' // (追蹤)
+        as: 'Followings'
       })
     }
   };

@@ -7,7 +7,6 @@ const { User, Book } = require('../models')
 const JWTStrategy = passportJWT.Strategy
 const ExtractJWT = passportJWT.ExtractJwt
 
-// 設定passport strategy
 passport.use(new LocalStrategy(
   { // 客製化使用者資料
     usernameField: 'email',
@@ -15,7 +14,7 @@ passport.use(new LocalStrategy(
     passReqToCallback: true // 對應下面的req,可把callback的第一個參數拿到req內,就可呼叫req.flash把想要的客製化訊息放入
   },
   (req, email, password, cb) => { // 使用者認證程序(callback function)
-    User.findOne({ where: { email } }) // 查詢User資料庫帳號是否存在
+    User.findOne({ where: { email } })
       .then(user => {
         if (!user) return cb(null, false, req.flash('error_messages', '帳號或密碼輸入錯誤！'))
         bcrypt.compare(password, user.password).then(res => {
@@ -28,7 +27,7 @@ passport.use(new LocalStrategy(
 
 const jwtOptions = { // 設定如何header 攜帶jwt用來製作簽章的字串，// 取哪找token，這指定了authorization header 裡的 bearer 項目
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET // 使用密鑰來檢查 token 是否經過纂改，也就是我們放進 process.env.JWT_SECRET 的 'bookSequelize' 字串，這組密鑰只有伺服器知道。
+  secretOrKey: process.env.JWT_SECRET // 使用密鑰來檢查 token 是否經過纂改，也就是我們放進 process.env.JWT_SECRET 的內容
 }
 passport.use(new JWTStrategy(jwtOptions, (jwtPayload, cb) => {
   User.findByPk(jwtPayload.id, {
@@ -46,8 +45,8 @@ passport.use(new JWTStrategy(jwtOptions, (jwtPayload, cb) => {
 passport.serializeUser((user, cb) => {
   cb(null, user.id)
 })
-passport.deserializeUser((id, cb) => { //  反序列
-  return User.findByPk(id, { // 從這邊拿到使用者的資料,所以變動
+passport.deserializeUser((id, cb) => {
+  return User.findByPk(id, {
     include: [
       { model: Book, as: 'FavoritedBooks' }, // as 要引入的關係(名字)
       { model: Book, as: 'LikedBooks' },

@@ -4,6 +4,7 @@ const passport = require('../../config/passport')
 const upload = require('../../middleware/multer')
 
 const admin = require('./modules/admin')
+const auth = require('./modules/auth')
 
 const bookController = require('../../controllers/pages/book-controller')
 const userController = require('../../controllers/pages/user-controller')
@@ -44,6 +45,7 @@ router.delete('/like/:bookId', authenticated, userController.removeLike)
 router.post('/following/:userId', authenticated, userController.addFollowing)
 router.delete('/following/:userId', authenticated, userController.removeFollowing)
 
+router.use('/auth', auth)
 router.use('/', (req, res) => res.redirect('/books'))
 router.use('/', generalErrorHandler)
 module.exports = router

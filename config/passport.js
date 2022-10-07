@@ -3,6 +3,7 @@ const LocalStrategy = require('passport-local')
 const passportJWT = require('passport-jwt')
 const bcrypt = require('bcryptjs')
 const { User, Book } = require('../models')
+const FacebookStrategy = require('passport-facebook').Strategy
 
 const JWTStrategy = passportJWT.Strategy
 const ExtractJWT = passportJWT.ExtractJwt
@@ -23,6 +24,32 @@ passport.use(new LocalStrategy(
         })
       })
   }
+))
+
+passport.use(new FacebookStrategy({
+  clientID: process.env.FACEBOOK_ID,
+  clientSecret: process.env.FACEBOOK_SECRET,
+  callbackURL: process.env.FACEBOOK_CALLBACK,
+  profileFields: ['email', 'displayName']
+},
+function (accessToken, refreshToken, profile, cb) {
+  const { name, email } = profile._json
+  User.findOne({ where: { email } })
+    .then(user => {
+      if (user) return cb(null, user)
+      const randomPassword = Math.random().toString(36).slice(-8)
+      bcrypt
+        .genSalt(10)
+        .then(salt => bcrypt.hash(randomPassword, salt))
+        .then(hash => User.create({
+          name,
+          email,
+          password: hash
+        }))
+        .then(user => cb(null, user))
+        .catch(err => cb(err, false))
+    })
+}
 ))
 
 const jwtOptions = { // 設定如何header 攜帶jwt用來製作簽章的字串，// 取哪找token，這指定了authorization header 裡的 bearer 項目

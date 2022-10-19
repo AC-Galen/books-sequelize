@@ -18,9 +18,7 @@ const adminController = {
     adminServices.postBook(req, (err, data) => {
       if (err) return next(err)
       req.flash('success_messages', 'book was successfully created')
-      res.redirect('/admin/books', data)
-      req.session.createData = data
-      return res.redirect('/admin/books')
+      res.redirect('/admin/books')
     })
   },
   getBook: (req, res, next) => {
@@ -39,7 +37,7 @@ const adminController = {
   },
   putBook: (req, res, next) => {
     const { name, isbn, author, publisher, description, categoryId } = req.body
-    if (!name) throw new Error('Book name is required!')
+    if (!name || !isbn || !author || !publisher || !description) throw new Error('Information is incomplete!')
     const { file } = req
     Promise.all([
       Book.findByPk(req.params.id),
